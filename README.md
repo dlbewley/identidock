@@ -105,4 +105,9 @@ curl: (7) Failed to connect to 192.168.59.103 port 32785: Connection refused
 # curl port 9090 in the container
 curl $(boot2docker ip):32786
 Hello World!
+# shortcut
+curl $(boot2docker ip):$(docker port $DID 9090 | cut -d: -f2)
+Hello World!
 ```
+
+The `cut` in the shortcut above is needed since docker port returns something like `0.0.0.0:9999`. I there a better way to do that?
