@@ -53,9 +53,20 @@ identidock          uwsgi               cf36ee739e9c        12 minutes ago      
 identidock          latest              fd04dbc88df1        43 minutes ago      765.1 MB
 ```
 
-## Step 3 Run uWSGI as someone other than root
+## Step 3 Run uWSGI as someone other than root and auto-map ports
 
-Using [this Dockerfile](https://github.com/dlbewley/identidock/blob/x/Dockerfile).
+Using [this Dockerfile](https://github.com/dlbewley/identidock/blob/41f39ffbc2ea12c1357079d227b2a9fe0d003235/Dockerfile) run the container as `uwsgi` user and designate ports in Dockerfile instead of on the command line.
 
-...
-
+```bash
+docker build -t identidock:user .
+docker run identidock:uwsgi whoami
+root
+docker run identidock:user whoami
+uwsgi
+DID=$(docker run -d -P --name port-test identidock:user)
+docker port port-test
+9090/tcp -> 0.0.0.0:32768
+9191/tcp -> 0.0.0.0:32769
+curl $(boot2docker ip):32768
+Hello World!
+```
