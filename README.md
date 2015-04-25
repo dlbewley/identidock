@@ -6,7 +6,16 @@
 
 Examples below are using [boot2docker](https://docs.docker.com/installation/mac/) on Mac running OS X 10.10.3.
 
+It might be helpful to refer to these Docker User Guide docs once you get stuck:
+
+- [Hello World][1]
+- [Working with Containers][2]
+
+[1]: [Docker User Guide: Hello World](https://docs.docker.com/userguide/dockerizing/)
+[2]: [Docker User Guide: Working With Containers](https://docs.docker.com/userguide/usingdocker/)
+
 ## Step 1. Simple Hello World
+_[Ref][1]_
 
 Using [this Dockerfile](https://github.com/dlbewley/identidock/blob/b8994922451700e83c50afa79f9749216165d810/Dockerfile).
 
@@ -72,6 +81,7 @@ Hello World!
 ```
 
 ## Step 4 Delegate app start to cmd shell script which determines environment first
+_[Ref][2]_
 
 Using [this Dockerfile](https://github.com/dlbewley/identidock/blob/d0040c2a26d9a6a2c5c90d3510c55c4bddc336f8/Dockerfile) build and run a dev instance of identidock.
 
