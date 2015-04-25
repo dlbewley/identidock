@@ -70,3 +70,39 @@ docker port port-test
 curl $(boot2docker ip):32768
 Hello World!
 ```
+
+## Step 4 Delegate app start to cmd shell script which determines environment first
+
+Using [this Dockerfile](https://github.com/dlbewley/identidock/blob/d0040c2a26d9a6a2c5c90d3510c55c4bddc336f8/Dockerfile) build and run a dev instance of identidock.
+
+```bash
+docker build -t identidock:cmd .
+DID=$(docker run -e "ENV=DEV" -d -P identidock:cmd)
+docker port $DID
+5000/tcp -> 0.0.0.0:32782
+9090/tcp -> 0.0.0.0:32783
+9191/tcp -> 0.0.0.0:32784
+# curl port 5000 in the container
+curl $(boot2docker ip):32782
+Hello World!
+# there is nothing listening on 9090 in this container
+curl $(boot2docker ip):32783
+curl: (7) Failed to connect to 192.168.59.103 port 32783: Connection refused
+```
+
+Now stop that container and run a production instance.
+
+```bash
+docker rm -f $DID
+DID=$(docker run -e "ENV=PROD" -d -P identidock:cmd)
+docker port $DID
+9191/tcp -> 0.0.0.0:32787
+5000/tcp -> 0.0.0.0:32785
+9090/tcp -> 0.0.0.0:32786
+# there is nothing listening on 5000 in this container
+curl $(boot2docker ip):32785
+curl: (7) Failed to connect to 192.168.59.103 port 32785: Connection refused
+# curl port 9090 in the container
+curl $(boot2docker ip):32786
+Hello World!
+```
