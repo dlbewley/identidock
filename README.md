@@ -11,8 +11,8 @@ It might be helpful to refer to these Docker User Guide docs once you get stuck:
 - [Hello World][1]
 - [Working with Containers][2]
 
-[1]: [Docker User Guide: Hello World](https://docs.docker.com/userguide/dockerizing/)
-[2]: [Docker User Guide: Working With Containers](https://docs.docker.com/userguide/usingdocker/)
+[1]: https://docs.docker.com/userguide/dockerizing/ "Docker User Guide: Hello World"
+[2]: https://docs.docker.com/userguide/usingdocker/ "Docker User Guide: Working With Containers"
 
 ## Step 1. Simple Hello World
 _[Ref][1]_
