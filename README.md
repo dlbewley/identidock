@@ -2,7 +2,7 @@
 
 `itentidock` example app from 
 
-![cover](http://akamaicovers.oreilly.com/images/0636920035671/bkt.gif) [Using Docker](http://shop.oreilly.com/product/0636920035671.do)
+![cover](http://akamaicovers.oreilly.com/images/0636920035671/bkt.gif) [Using Docker](http://shop.oreilly.com/product/0636920035671.do) by [Adrian Mouat](https://github.com/amouat)
 
 Examples below are using [boot2docker](https://docs.docker.com/installation/mac/) on Mac running OS X 10.10.3.
 
