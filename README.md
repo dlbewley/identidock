@@ -15,6 +15,7 @@ It might be helpful to refer to these Docker User Guide docs once you get stuck:
 [2]: https://docs.docker.com/userguide/usingdocker/ "Docker User Guide: Working With Containers"
 [3]: https://docs.docker.com/userguide/dockerimages/ "Docker User Guide: Working with Docker Images"
 [4]: http://docs.docker.com/compose/install/ "Docker Compose Install"
+[5]: https://docs.docker.com/userguide/dockerlinks/ "Docker User Guide: Linking Containers Together"
 
 ## Step 1. Simple Hello World
 _[Ref][1]_
@@ -218,3 +219,43 @@ identidock_1 | 192.168.59.3 - - [26/Apr/2015 22:14:46] "GET / HTTP/1.1" 200 -
 ```
 
 Since we mapped our app directory as a volume in the container, we can make changes to [identidock.py](app/identidock.py) which will be picked up immediately. Try it.
+
+## Step 6 Link to dnmonster container and update app to generate images
+_[Ref][5]_
+
+Moving beyond 'Hello World!' now we'll update the app to call out to another web server to request a generated image for display. The webserver will be a [linked][5] container called _dnmonster_.
+
+- Update `identidock.py` to generate an html page and form
+- Update [the Dockerfile](https://github.com/dlbewley/identidock/blob/9e672cee7650c6a07ec16ab2630a2675ee02faa0/Dockerfile) to add `requests` library to the pip install layer.
+- Rebuild the image and pull the [amouat/dnmonster](https://registry.hub.docker.com/u/amouat/dnmonster/) image.
+
+```bash
+# rebuild image with 'link' tag
+docker build -t identidock:link .
+# automatically pull and run the image found on registry.hub.docker.com
+docker run -d --name dnmonster amouat/dnmonster
+```
+
+The Dockerfile for that image is basically as follows. Note that it exposes port 8080.
+
+```
+FROM node:0.11
+RUN apt-get update && apt-get install -yy libcairo2-dev \
+    libjpeg62-turbo-dev libpango1.0-dev libgif-dev build-essential g++
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY package.json /usr/src/app/
+RUN npm install
+COPY ./src /usr/src/app
+CMD [ "npm", "start" ]
+EXPOSE 8080
+```
+
+Now create a container from the `identidock:link` image and link it to the newly started _dnmonster_ container.
+
+```bash
+docker run -d -p 5000:5000 -e "ENV=DEV" --link dnmonster:dnmonster identidock:link
+```
+
+If you use exec -ti to run bash in the identidock container you can see that `/etc/hosts` has an entry for dnmonster automatically and you can ping it by name. Pretty cool.
+
